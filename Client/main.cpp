@@ -9,3 +9,16 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <errno.h>
+
+int main(){
+    // Setting up a port and an IP address
+    int port = ; // ADD WHEN SERVER IS READY
+    string ipaddr = "127.0.0.1" // LOCAL IP/IP OF THIS MACHINE
+
+    sockaddr_in saddr; // For IPv4 addresses
+    saddr.sin_family = AF_INET;
+
+    // Crating a socket
+    int sckt = socket(AF_INET, SOCK_STREAM, 0);
+}
+
