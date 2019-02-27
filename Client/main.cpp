@@ -31,7 +31,7 @@ int main(){
     char buffer[1024];
 
     // While loop for sending the messages to the server
-    while{
+    while(true){
 
     }
 }
