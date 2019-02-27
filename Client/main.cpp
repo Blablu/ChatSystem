@@ -11,6 +11,7 @@
 #include <errno.h>
 
 int main(){
+
     // Setting up a port and an IP address
     int port = ; // ADD WHEN SERVER IS READY
     string ipaddr = "127.0.0.1" // LOCAL IP/IP OF THIS MACHINE
@@ -22,5 +23,16 @@ int main(){
 
     // Crating a socket
     int sckt = socket(AF_INET, SOCK_STREAM, 0);
+
+    // Connecting to the server
+
+    // Setting up a string with a size limit, which will hold the input text
+    string inputText;
+    char buffer[1024];
+
+    // While loop for sending the messages to the server
+    while{
+
+    }
 }
 
