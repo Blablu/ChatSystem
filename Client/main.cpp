@@ -18,7 +18,7 @@ int main(){
     sockaddr_in saddr; // For IPv4 addresses
     saddr.sin_family = AF_INET;
     saddr.sin_port = htons(port);
-    inet_pton();
+    inet_pton(AF_INET, ipaddr.c_str(), &saddr.sin_addr);
 
     // Crating a socket
     int sckt = socket(AF_INET, SOCK_STREAM, 0);
