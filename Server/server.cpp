@@ -12,9 +12,11 @@ using namespace std;
 int main()
 {
 
+    char buff[256];
+
     //create a socket
     int socked = socket(AF_INET, SOCK_STREAM, 0);
-    if (socked == -1)
+    if (socked < 0)
     {
         cerr << "Can't create a socket!";
         return -1;
@@ -22,18 +24,18 @@ int main()
 
 
     //bind the socket to a port/IP
-    sockaddr_in hint;
-    hint.sin_family = AF_INET;
-    hint.sin_port = htons(33000);
-    inet_pton(AF_INET, "0.0.0.0", &hint.sin_addr);
+    sockaddr_in address;
+    address.sin_family = AF_INET;
+    address.sin_port = htons(33000);  //host byte order to neework byte order
+    inet_pton(AF_INET, "0.0.0.0", &address.sin_addr);
 
-    if (bind(socked, (sockaddr*)&hint, sizeof(hint)) == -1)
+    if (bind(socked, (struct sockaddr*)&address, sizeof(address)) < 0)
     {
         cerr << "Can't bint to IP/port";
         return -2;
     }
 
-    if (listen(socked, SOMAXCONN) == -1)
+    if (listen(socked, SOMAXCONN) < 0)
     {
         cerr << "Can't listen!";
         return -3;
@@ -45,13 +47,28 @@ int main()
     char host[NI_MAXHOST];
     char svc[NI_MAXSERV];
 
-    int clientSocket = accept(socked, (sockaddr*)&client, &clientSize);
-    if (clientSocket == -1)
+    int clientSocket = accept(socked, (struct sockaddr*)&client, &clientSize);
+    if (clientSocket < 0)
     {
         cerr << "Problem with client connecting!";
         return -4;
     }
 
+    send(clientSocket, "Hello there! ", 12, 0);
+
+    bzero(buff, 256);
+
+    int r = read(clientSocket, buff, 255);
+    if (r < 0)
+    {
+        cerr << "Error reading from socket! ";
+        return -5;
+    }
+    else
+    {
+        cout << "Message: %s \n" << buff;
+        r = write(clientSocket, "Confirmed! ", 11);
+    }
 
     //close the socket
     close(socked);
@@ -73,7 +90,7 @@ int main()
 
 
     //display message, echo message
-    char buff[4096];
+
     while (true)
     {
         //clear the buffer
