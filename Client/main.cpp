@@ -35,7 +35,7 @@ int main(){
     while(true){
             cout << "Enter your message here: ";
             cin >> inputText;
-            int sendText = send();
+            int sendText = send(sckt, textInput.c_str(), textInput.size(), 0);
             int serverResponse = recv();
     }
     close(sckt);
