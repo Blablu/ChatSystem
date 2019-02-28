@@ -1,12 +1,15 @@
 /* List of things to be done for the client: 1)Get the IP address of the host 2)Create a socket 3)Establish a connection to the server 4)Send/Receive messages 5)Close the connection to disconnect */
+#define WIN32_LEAN_AND_MEAN
+
 #include <iostream>
 #include <stdio.h>
+#include <cstdio>
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
 #include <string>
 #include <sys/types.h>
-#include <ws2tcpip.h>
+#include <Ws2tcpip.h>
 #include <errno.h>
 
 using namespace std;
@@ -28,7 +31,7 @@ int main(){
     sockaddr_in saddr; // For IPv4 addresses
     saddr.sin_family = AF_INET;
     saddr.sin_port = htons(port);
-    inet_pton(AF_INET, ipaddr.c_str(), &saddr.sin_addr);
+    //inet_pton(AF_INET, ipaddr.c_str(), &saddr.sin_addr);
 
     // Connecting to the server
     int cs = connect(sckt, (sockaddr*)&saddr, sizeof(sockaddr_in));
