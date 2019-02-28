@@ -25,6 +25,7 @@ int main(){
     int sckt = socket(AF_INET, SOCK_STREAM, 0);
 
     // Connecting to the server
+    int cs = connect(sckt, (sockaddr*)&saddr, sockaddr_in);
 
     // Setting up a string with a size limit, which will hold the input text
     string inputText;
@@ -32,7 +33,10 @@ int main(){
 
     // While loop for sending the messages to the server
     while(true){
-
+            cout << "Enter your message here: ";
+            cin >> inputText;
+            int sendText = send();
+            int serverResponse = recv();
     }
 }
 
