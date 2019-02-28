@@ -5,9 +5,9 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
+#include <string>
 #include <sys/types.h>
-#include <Winsock2.h>
-#include <WS2tcpip.h>
+#include <ws2tcpip.h>
 #include <errno.h>
 
 using namespace std;
