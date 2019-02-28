@@ -1,5 +1,4 @@
 /* List of things to be done for the client: 1)Get the IP address of the host 2)Create a socket 3)Establish a connection to the server 4)Send/Receive messages 5)Close the connection to disconnect */
-
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
@@ -10,12 +9,14 @@
 #include <ws2tcpip.h>
 #include <errno.h>
 
+#pragma comment(lib, "ws2_32.lib")
+
 using namespace std;
 
 int main(){
 
     // WinSock
-    WSAData data;
+    WSADATA data;
     WORD ver = MAKEWORD(2, 2);
     int ws = WSAStartup(ver, &data);
 
