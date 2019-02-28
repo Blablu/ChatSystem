@@ -37,6 +37,7 @@ int main(){
             cin >> inputText;
             int sendText = send(sckt, textInput.c_str(), textInput.size(), 0);
             int serverResponse = recv(sckt, buffer, 1024, 0);
+            cout << "Message from server: " << string(buffer, serverResponse)<< "\n";
     }
     close(sckt);
 
