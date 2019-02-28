@@ -38,5 +38,8 @@ int main(){
             int sendText = send();
             int serverResponse = recv();
     }
+    close(sckt);
+
+    return 0;
 }
 
