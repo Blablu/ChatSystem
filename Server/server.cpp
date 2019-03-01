@@ -11,7 +11,7 @@ using namespace std;
 
 int main()
 {
-
+    string inputText;
     char buff[256];
 
     //create a socket
@@ -29,9 +29,9 @@ int main()
     address.sin_port = htons(33000);  //host byte order to neework byte order
     inet_pton(AF_INET, "0.0.0.0", &address.sin_addr);
 
-    if (bind(socked, (struct sockaddr*)&address, sizeof(address)) < 0)
+    if (bind(socked, (struct sockaddr*)&address, sizeof(address))< 0)
     {
-        cerr << "Can't bint to IP/port";
+        cerr << "Can't bind to IP/port";
         return -2;
     }
 
@@ -54,6 +54,8 @@ int main()
         return -4;
     }
 
+    close(socked);
+
     send(clientSocket, "Hello there! ", 12, 0);
 
     bzero(buff, 256);
@@ -66,12 +68,12 @@ int main()
     }
     else
     {
-        cout << "Message: %s \n" << buff;
-        r = write(clientSocket, "Confirmed! ", 11);
+        cout << "Message: \n" << buff;
+        //r = write(clientSocket, "Confirmed! ", 11);
     }
 
     //close the socket
-    close(socked);
+
 
     memset(host, 0, NI_MAXHOST);
     memset(svc, 0, NI_MAXSERV);
@@ -80,13 +82,17 @@ int main()
 
     if (result)
     {
-        cout << host << "connected on " << svc << endl;
+        cout << host << " connected on " << svc << endl;
     }
     else
     {
         inet_ntop(AF_INET, &client.sin_addr, host, NI_MAXHOST);
-        cout << host << "connected on " << ntohs(client.sin_port) << endl;
+        cout << host << " connected on " << ntohs(client.sin_port) << endl;
     }
+
+    //cout<< "Enter your message here: ";
+    //getline(cin, inputText);
+    //int sendText = send(clientSocket, inputText.c_str(), inputText.size(), 0);
 
 
     //display message, echo message
@@ -94,28 +100,29 @@ int main()
     while (true)
     {
         //clear the buffer
-        memset(buff, 0, 4096);
+        memset(buff, 0, 1024);
 
         //wait for message
-        int bytesRecv = recv(clientSocket, buff, 4096, 0);
+        int bytesRecv = recv(clientSocket, buff, 1024, 0);
 
-        if (bytesRecv == -1)
+        if (bytesRecv < 0)
         {
             cerr << "There was a connection issue" << endl;
             break;
         }
 
-        if (bytesRecv == 0)
+        if (bytesRecv = 0)
         {
             cout << "The client disconnected" << endl;
             break;
         }
 
         //display message
-        cout << "Received: " << string(buff, 0, bytesRecv) << endl;
+        cout << "Received: " << string(buff, 0, bytesRecv + sizeof(buff)) << endl;
 
         //resend message
-        send(clientSocket, buff, bytesRecv +1, 0);
+
+        send(clientSocket, buff, bytesRecv + sizeof(buff), 0);
 
     }
     //close socket
