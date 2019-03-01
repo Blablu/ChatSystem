@@ -25,7 +25,7 @@ int main() {
 	sockaddr_in saddr; // For IPv4 addresses
 	saddr.sin_family = AF_INET;
 	saddr.sin_port = htons(port);
-	inet_pton(AF_INET, ipaddr.c_str(), &saddr.sin_addr); // THIS TEXT-TO-BINARY CONVERSION FUNCTION IS NOT WROKING ON WINDOWS 10 APPARENTLY
+	inet_pton(AF_INET, ipaddr.c_str(), &saddr.sin_addr);
 
 	// Connecting to the server
 	int cs = connect(sckt, (sockaddr*)&saddr, sizeof(sockaddr_in));
@@ -38,9 +38,9 @@ int main() {
 	while (true) {
 		cout << "Enter your message here: ";
 		getline(cin, inputText);
-		int sendText = send(sckt, inputText.c_str(), inputText.size() + 1, 0);
+		int sendText = send(sckt, inputText.c_str(), inputText.size(), 0);
 		int serverResponse = recv(sckt, buffer, 1024, 0);
-		cout << "Message from server: " << string(buffer, 0, serverResponse) << "\r \n";
+		cout << "Message from server: " << string(buffer, 0, serverResponse) << endl;
 	}
 	closesocket(sckt);
 
