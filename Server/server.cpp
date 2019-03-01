@@ -6,13 +6,41 @@
 #include <netdb.h>
 #include <arpa/inet.h>
 #include <string>
+#include <pthread.h>
+
 
 using namespace std;
+
+void *task1(void *);
+
+static int connFd;
+
+void *task1 (void *dummyPt)
+{
+    cout << "Thread No: " << pthread_self() << endl;
+    char test[300];
+    bzero(test, 301);
+    bool loop = false;
+    while(!loop)
+    {
+        bzero(test, 301);
+        read(connFd, test, 300);
+        string tester (test);
+        cout << tester << endl;
+        if (tester == "exit")
+            break;
+    }
+    cout << "Close thread " << endl;
+    close(connFd);
+}
 
 int main()
 {
     string inputText;
     char buff[256];
+    int clientSocket;
+
+    pthread_t threadA[3];
 
     //create a socket
     int socked = socket(AF_INET, SOCK_STREAM, 0);
@@ -41,27 +69,8 @@ int main()
         return -3;
     }
 
-    fd_set master;
-    FD_ZERO(&master);
+    int noThread = 0;
 
-    FD_SET(socked, &master);
-
-    while (true)
-    {
-        fd_set copy = master;
-
-        int socketCount = select(0, &copy, NULL, NULL, NULL);
-
-        for (int i = 0; i < socketCount; i++)
-        {
-            socket sock = copy.fd_array[i];
-            if (sock == socked)
-            {
-                socket client = accept(socked, NULL, NULL);
-                FD_SET(client, &master);
-            }
-        }
-    }
 
     //accept a call
     sockaddr_in client;
@@ -69,14 +78,26 @@ int main()
     char host[NI_MAXHOST];
     char svc[NI_MAXSERV];
 
-    int clientSocket = accept(socked, (struct sockaddr*)&client, &clientSize);
+    while (noThread < 3)
+    {
+
+    clientSocket = accept(socked, (struct sockaddr*)&client, &clientSize);
     if (clientSocket < 0)
     {
         cerr << "Problem with client connecting!";
         return -4;
     }
 
-    close(socked);
+    //close(socked);
+
+    pthread_create(&threadA[noThread], NULL, task1, NULL);
+    noThread++;
+    }
+
+    for(int i = 0; i < 3; i++)
+    {
+        pthread_join(threadA[i], NULL);
+    }
 
     send(clientSocket, "Hello there! ", 12, 0);
 
