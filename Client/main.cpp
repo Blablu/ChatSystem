@@ -40,8 +40,7 @@ int main(){
             int serverResponse = recv(sckt, buffer, 1024, 0);
             cout << "Message from server: " << string(buffer, serverResponse)<< "\n";
     }
-    close(sckt);
+    closesocket(sckt);
 
     return 0;
 }
-
