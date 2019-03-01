@@ -40,7 +40,7 @@ int main() {
 		getline(cin, inputText);
 		int sendText = send(sckt, inputText.c_str(), inputText.size() + 1, 0);
 		int serverResponse = recv(sckt, buffer, 1024, 0);
-		cout << "Message from server: " << string(buffer, 0, serverResponse) << endl;
+		cout << "Message from server: " << string(buffer, 0, serverResponse) << "\r \n";
 	}
 	closesocket(sckt);
 
