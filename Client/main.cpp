@@ -25,13 +25,13 @@ int main(){
     int sckt = socket(AF_INET, SOCK_STREAM, 0);
 
     // Setting up a port and an IP address
-    int port = 54000; // ADD WHEN SERVER IS READY
-    string ipaddr = "127.0.0.1"; // LOCAL IP/IP OF THIS MACHINE
+    int port = 33000; // ADD WHEN SERVER IS READY
+    string ipaddr = "170.20.10.5"; // LOCAL IP/IP OF THIS MACHINE
 
     sockaddr_in saddr; // For IPv4 addresses
     saddr.sin_family = AF_INET;
     saddr.sin_port = htons(port);
-    inet_pton(AF_INET, ipaddr.c_str(), &saddr.sin_addr); // THIS TEXT-TO-BINARY CONVERSION FUNCTION IS NOT WROKING ON WINDOWS 10 APPARENTLY
+    // inet_pton(AF_INET, ipaddr.c_str(), &saddr.sin_addr); // THIS TEXT-TO-BINARY CONVERSION FUNCTION IS NOT WROKING ON WINDOWS 10 APPARENTLY
 
     // Connecting to the server
     int cs = connect(sckt, (sockaddr*)&saddr, sizeof(sockaddr_in));
