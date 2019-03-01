@@ -35,10 +35,32 @@ int main()
         return -2;
     }
 
-    if (listen(socked, SOMAXCONN) < 0)
+    if (listen(socked, 5) < 0)
     {
         cerr << "Can't listen!";
         return -3;
+    }
+
+    fd_set master;
+    FD_ZERO(&master);
+
+    FD_SET(socked, &master);
+
+    while (true)
+    {
+        fd_set copy = master;
+
+        int socketCount = select(0, &copy, NULL, NULL, NULL);
+
+        for (int i = 0; i < socketCount; i++)
+        {
+            socket sock = copy.fd_array[i];
+            if (sock == socked)
+            {
+                socket client = accept(socked, NULL, NULL);
+                FD_SET(client, &master);
+            }
+        }
     }
 
     //accept a call
@@ -68,15 +90,15 @@ int main()
     }
     else
     {
-        cout << "Message: \n" << buff;
+        cout << "Success! \n" << buff;
         //r = write(clientSocket, "Confirmed! ", 11);
     }
 
     //close the socket
 
 
-    memset(host, 0, NI_MAXHOST);
-    memset(svc, 0, NI_MAXSERV);
+    memset(host, 0, NI_MAXHOST); //gets the numeric form of the host name
+    memset(svc, 0, NI_MAXSERV); //get the service info from client
 
     int result = getnameinfo((sockaddr*)&client, sizeof(client), host, NI_MAXHOST, svc, NI_MAXSERV, 0);
 
