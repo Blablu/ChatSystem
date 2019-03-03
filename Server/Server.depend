@@ -1,0 +1,16 @@
+# depslib dependency file v1.0
+1551612066 source:/Users/cristian/Documents/GitHub/ChatSystem/Server/server.cpp
+
+1551434562 source:/Users/cristian/Documents/GitHub/ChatSystem/Server/client.cpp
+	<iostream>
+	<stdio.h>
+	<cstdio>
+	<stdlib.h>
+	<unistd.h>
+	<string.h>
+	<string>
+	<sys/types.h>
+	<arpa/inet.h>
+	<errno.h>
+	<sys/socket.h>
+
