@@ -47,7 +47,7 @@ void msgHandler(int msgSock = socket(AF_INET, SOCK_STREAM, 0))
         {
             cout << "Received: " << string(buff, 0, bytesRecv + sizeof(buff)) << endl;
         }
-        //resend message
+        //resend/echo message
 
         send(clientSocket, buff, bytesRecv + sizeof(buff), 0);
     }
@@ -57,6 +57,7 @@ void msgHandler(int msgSock = socket(AF_INET, SOCK_STREAM, 0))
 int clientHandler()
 {
 
+    //create the socket
     int socked = socket(AF_INET, SOCK_STREAM, 0);
 
     if (socked < 0)
@@ -64,14 +65,15 @@ int clientHandler()
         cerr << "Can't create a socket!";
         return -1;
     }
-
+    
     memset(&address, 0, sizeof(address));
-
+    
     sockaddr_in address;
-    address.sin_family = AF_INET;
+    address.sin_family = AF_INET;   //use IPv4
     address.sin_port = htons(33000);  //host byte order to neework byte order
     inet_pton(AF_INET, "0.0.0.0", &address.sin_addr);
-
+    
+    //bind the IP and port to the socket and error handling in case the binding fails
     if (::bind(socked, (struct sockaddr*)&address, sizeof(address))< 0)
     {
         cerr << "Can't bind to IP/port";
@@ -91,7 +93,9 @@ int clientHandler()
 
     memset(host, 0, NI_MAXHOST); //gets the numeric form of the host name
     memset(svc, 0, NI_MAXSERV); //get the service info from client
-
+    
+    //trying to get the host name and service info from the client
+    //(it worked in Code::Blocks in the beginning, but after switching to Xcode id doesn't work anymore)
     int result = getnameinfo((sockaddr*)&client, sizeof(client), host, NI_MAXHOST, svc, NI_MAXSERV, 0);
     if (result == 0)
     {
@@ -102,7 +106,8 @@ int clientHandler()
         inet_ntop(AF_INET, &client.sin_addr, host, NI_MAXHOST);
         cout << host << " connected on " << ntohs(client.sin_port) << endl;
     }
-
+    
+    //accepting the client
     while (true)
     {
         clientSocket = accept(socked, (struct sockaddr*)&client, &clientSize);
